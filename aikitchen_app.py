@@ -1,5 +1,6 @@
 #%%
 import streamlit as st
+import requests
 import json
 import logging
 from typing import Optional
@@ -8,9 +9,10 @@ from PIL import Image
 import os
 from langflow.load import run_flow_from_json
 
-#%% constants
-FLOW_JSON_FILE = "AI Kitchen.json"
+os.environ["LANGFLOW_DATABASE_URL"] = "sqlite:///:memory:"
 
+#%% constants
+FLOW_JSON_PATH = "AI Kitchen.json" 
 TWEAKS = {
     "OpenAIModel-2w2an": {},
     "Prompt-ScINz": {},
@@ -20,26 +22,32 @@ TWEAKS = {
     "Memory-7zsPb": {}
 }
 
-# initialize logging
+# Initialize logging
 logging.basicConfig(level=logging.INFO)
 
-def run_flow(message: str) -> str:
+def run_flow(message: str, tweaks: Optional[dict] = None) -> dict:
     """
-    Run Langflow locally from a JSON file instead of using an API.
+    Run the Langflow JSON flow with a given message.
     """
     try:
-        result = run_flow_from_json(flow=FLOW_JSON_FILE,
-                                    input_value=message,
-                                    session_id="",  # Optional session tracking
-                                    fallback_to_env_vars=True, 
-                                    tweaks=TWEAKS)
-        return result.get("outputs", "No response received")
+        result = run_flow_from_json(
+            flow=FLOW_JSON_PATH,
+            input_value=message,
+            session_id="",  # Provide a session id if you want to use session state
+            fallback_to_env_vars=True,  # False by default
+            tweaks=tweaks or {}
+        )
+        return result
     except Exception as e:
-        return f"Error running Langflow: {str(e)}"
+        logging.error(f"Error running Langflow: {str(e)}")
+        return {"error": "Failed to run the AI process."}
 
 def extract_message(response: dict) -> str:
+    """
+    Extracts AI response message.
+    """
     try:
-        return response if isinstance(response, str) else "No valid message found in response."
+        return response['outputs'][0]['outputs'][0]['results']['message']['text']
     except (KeyError, IndexError):
         logging.error("No valid message found in response.")
         return "No valid message found in response."
@@ -103,29 +111,29 @@ def main():
     if image:
         st.image(image, caption="Uploaded Image", use_container_width=True)
         
-        # detect ingredients
+        # Detect ingredients
         detected_ingredients = process_image(image)
         
-        # send detected ingredients to Langflow for recipe suggestion
-        response = run_flow(detected_ingredients)
+        # Send detected ingredients to Langflow for recipe suggestion
+        response = run_flow(detected_ingredients, tweaks=TWEAKS)
         assistant_response = extract_message(response)
         
         # AI immediately responds when image is uploaded
         ai_message = f"{assistant_response}"
 
-        # add the AI response to chat history
+        # Add the AI response to chat history
         st.session_state.messages.append({
             "role": "assistant",
             "content": ai_message,
             "avatar": "👩🏻‍🍳",
         })
 
-    # display chat history
+    # Display chat history
     for message in st.session_state.messages:
         with st.chat_message(message["role"], avatar=message["avatar"]):
             st.write(message["content"])
 
-    # chat input for user queries
+    # Chat input for user queries
     if query := st.chat_input("Ask me anything..."):
         st.session_state.messages.append({
             "role": "user",
@@ -138,7 +146,7 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                assistant_response = extract_message(run_flow(query))
+                assistant_response = extract_message(run_flow(query, tweaks=TWEAKS))
                 message_placeholder.write(assistant_response)
         
         st.session_state.messages.append({
