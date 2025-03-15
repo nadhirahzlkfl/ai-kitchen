@@ -92,8 +92,8 @@ def main():
         "backgroundColor": "#C8A2C8",  # Background color (Streamlit allows background only)
         "textColor": "#000000",  # Text color
         "font": "sans serif"  # Font styles
-    }
-)
+        }
+    )
     st.title("AI Kitchen 👩🏻‍🍳")
     st.write("Use the camera or upload an image to start")
 
