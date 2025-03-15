@@ -120,6 +120,15 @@ def main():
         st.session_state.messages = []
 
     with st.sidebar:
+        st.markdown("### AI Kitchen 👩🏻‍🍳")
+        st.markdown(
+        """
+        **Welcome to AI Kitchen!**  
+        🍳 **Upload a food image** or **take a picture**,  
+        and AI will detect ingredients & suggest recipes!  
+        """
+        )
+        
         enable_camera = st.checkbox("Enable camera")
         picture = st.camera_input("Take a picture", disabled=not enable_camera)
         uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
@@ -130,7 +139,6 @@ def main():
     elif uploaded_file:
         image = Image.open(uploaded_file)
     
-    # If an image is uploaded, detect ingredients and AI responds immediately
     if image:
         st.image(image, caption="Uploaded Image", use_container_width=True)
         
