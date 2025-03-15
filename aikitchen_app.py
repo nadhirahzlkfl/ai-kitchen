@@ -87,8 +87,7 @@ def main():
     [data-testid=stSidebar]{
         background-color: #C8A2C8;
         padding: 20px;
-        border-radius: 10px
-        color: #222222;
+        border-radius: 10px;
     }
     </style>
     """, unsafe_allow_html=True)
