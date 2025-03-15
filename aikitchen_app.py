@@ -83,10 +83,6 @@ def process_image(image):
 
 def main():
     st.set_page_config(
-    page_title="My Streamlit App",
-    page_icon="🍳",
-    layout="wide",  # Optionally set layout (wide or centered)
-    initial_sidebar_state="expanded",  # Optionally set sidebar state
     theme={
         "backgroundColor": "#C8A2C8",  # Background color (Streamlit allows background only)
         "textColor": "#000000",  # Text color
