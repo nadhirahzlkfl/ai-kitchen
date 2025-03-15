@@ -82,6 +82,14 @@ def process_image(image):
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
 
 def main():
+    st.markdown("""
+    <style>
+    [data-testid-=siSidebar]{
+        background-color: #C8A2C8;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.title("AI Kitchen 👩🏻‍🍳")
     st.write("Use the camera or upload an image to start")
 
