@@ -2,7 +2,7 @@
 
 This is a Streamlit app built to assist in identifying ingredients in uploaded or camera-captured images, providing recipe suggestions based on the detected ingredients, and answering cooking-related queries. It uses YOLO (You Only Look Once) for object detection and Langflow for generating responses and recipe suggestions.
 
-![Application](static/aikitchen_app.png)
+![Application](/static/aikitchen_app.png)
 
 ## Features
 
