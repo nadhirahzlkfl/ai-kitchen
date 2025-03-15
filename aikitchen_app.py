@@ -86,7 +86,12 @@ def main():
     <style>
     [data-testid=stSidebar] {
         background-color: #C8A2C8;
-        color: #222222;
+    }
+     /* Change background color of the container */
+    .stContainer {
+        background-color: #FFB6C1;
+        padding: 20px;
+        border-radius: 10px;
     }
     </style>
     """, unsafe_allow_html=True)
