@@ -88,7 +88,7 @@ def main():
         footer {visibility: hidden;}  /* Hide footer */
         header {visibility: hidden;}  /* Hide header */
     </style>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
     
     st.title("AI Kitchen 👩🏻‍🍳")
     st.write("Use the camera or upload an image to start")
