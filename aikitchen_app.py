@@ -88,7 +88,6 @@ def main():
     layout="wide",  # Optionally set layout (wide or centered)
     initial_sidebar_state="expanded",  # Optionally set sidebar state
     theme={
-        "primaryColor": "#C8A2C8",  # Your custom primary color
         "backgroundColor": "#C8A2C8",  # Background color (Streamlit allows background only)
         "textColor": "#000000",  # Text color
         "font": "sans serif"  # Font styles
