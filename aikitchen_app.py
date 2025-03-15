@@ -7,9 +7,12 @@ from ultralytics import YOLO
 from PIL import Image
 from langflow.load import run_flow_from_json
 
-#%% Force Langflow to run without a database
-os.environ["LANGFLOW_DATABASE_URL"] = "sqlite:///:memory:"
-os.environ["LANGFLOW_DISABLE_DATABASE"] = "true"  # **NEW: Fully disable database usage**
+# Ensure the database directory exists
+db_path = "database/langflow.db"
+os.makedirs(os.path.dirname(db_path), exist_ok=True)
+
+# Set the environment variable for SQLite
+os.environ["LANGFLOW_DATABASE_URL"] = f"sqlite:///{db_path}"
 
 #%% Constants
 FLOW_JSON_PATH = "AI Kitchen.json"  # Ensure this file is in your project folder
