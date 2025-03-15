@@ -82,6 +82,37 @@ def process_image(image):
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
 
 def main():
+    # theme
+    st.markdown(
+    """
+    <style>
+    /* Main Background Color */
+    body {
+        background-color: #C8A2C8;  /* Change to your desired color */
+    }
+
+    /* Sidebar Background Color */
+    .css-1d391kg {
+        background-color: #C8A2C8;  /* Sidebar background color */
+    }
+
+    /* Sidebar Text Color */
+    .css-1d391kg .sidebar-content {
+        color: #222222;  /* Dark grey text in the sidebar */
+        font-style: italic;
+    }
+
+    .css-1d391kg .sidebar .sidebar-item {
+        color: #222222;  /* Dark grey text for sidebar items */
+    }
+
+    .css-1d391kg .sidebar .sidebar-item:hover {
+        background-color: #FFBFF0;  /* Light pink hover effect for items */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
     st.title("AI Kitchen 👩🏻‍🍳")
     st.write("Use the camera or upload an image to start")
 
