@@ -85,35 +85,40 @@ def main():
     # theme
     st.markdown("""
     <style>
-        /* Background color */
+        /* Main Background */
         .css-1d391kg {
             background-color: #C8A2C8;
         }
+
+        /* Secondary Background (for containers) */
         .css-1v0mbdj {
             background-color: #FFE8E8;
         }
 
-        /* Chatbox style */
-        .chat-message .css-1w0f2lr {
+        /* Chatbox and Message Styles */
+        .chat-message {
             background-color: #FFFFE3;
             color: #222222;
-            padding: 10px;
             border-radius: 10px;
+            padding: 12px;
         }
 
-        /* Text color for messages */
         .css-1x0m2u4 {
             color: #222222;
         }
 
-        /* For better layout of the app */
-        .css-1ok7nxg {
-            padding-top: 20px;
-        }
-
-        /* Chat container background */
-        .css-11y9ob1 {
+        /* Sidebar and input box styles */
+        .stTextInput, .stFileUploader, .stButton {
             background-color: #FFFFE3;
+            color: #222222;
+        }
+        
+        /* Input message box styling */
+        .stChatInput input {
+            background-color: #FFFFE3;
+            color: #222222;
+            border-radius: 5px;
+            padding: 10px;
         }
     </style>
     """, unsafe_allow_html=True)
