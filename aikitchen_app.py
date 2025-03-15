@@ -85,7 +85,8 @@ def main():
     st.markdown("""
     <style>
     [data-testid=stSidebar] {
-        background-color: #FFFFE3;
+        background-color: #C8A2C8;
+        color: #222222;
     }
     </style>
     """, unsafe_allow_html=True)
