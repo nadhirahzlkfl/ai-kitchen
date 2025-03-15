@@ -50,4 +50,3 @@ This is a Streamlit app built to assist in identifying ingredients in uploaded o
 ### Data Source
 
 [Data Source](https://universe.roboflow.com/wonkeun-jung-vfcwn/ingredients-agbcq)
-# ai-kitchen
