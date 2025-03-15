@@ -82,6 +82,19 @@ def process_image(image):
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
 
 def main():
+    st.set_page_config(
+    page_title="My Streamlit App",
+    page_icon="🍳",
+    layout="wide",  # Optionally set layout (wide or centered)
+    initial_sidebar_state="expanded",  # Optionally set sidebar state
+    theme={
+        "primaryColor": "#C8A2C8",  # Your custom primary color
+        "backgroundColor": "#C8A2C8",  # Background color
+        "secondaryBackgroundColor": "#FFBFF0",  # Sidebar background
+        "textColor": "#000000",  # Text color
+        "font": "sans serif"  # Font styles
+        }
+    )
     st.title("AI Kitchen 👩🏻‍🍳")
     st.write("Use the camera or upload an image to start")
 
