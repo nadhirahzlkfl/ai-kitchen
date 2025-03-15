@@ -82,6 +82,42 @@ def process_image(image):
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
 
 def main():
+    # theme
+    st.markdown("""
+    <style>
+        /* Background color */
+        .css-1d391kg {
+            background-color: #C8A2C8;
+        }
+        .css-1v0mbdj {
+            background-color: #FFE8E8;
+        }
+
+        /* Chatbox style */
+        .chat-message .css-1w0f2lr {
+            background-color: #FFFFE3;
+            color: #222222;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* Text color for messages */
+        .css-1x0m2u4 {
+            color: #222222;
+        }
+
+        /* For better layout of the app */
+        .css-1ok7nxg {
+            padding-top: 20px;
+        }
+
+        /* Chat container background */
+        .css-11y9ob1 {
+            background-color: #FFFFE3;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.title("AI Kitchen 👩🏻‍🍳")
     st.write("Use the camera or upload an image to start")
 
