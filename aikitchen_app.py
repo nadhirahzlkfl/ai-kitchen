@@ -83,7 +83,7 @@ def process_image(image):
 
 def main():
     st.title("AI Kitchen 👩🏻‍🍳")
-    st.write("AI Kitchen is an intuitive app that helps you explore recipes and cooking ideas.
+    st.markdown("AI Kitchen is an intuitive app that helps you explore recipes and cooking ideas.
             Whether you're looking for inspiration or just need some culinary advice, 
             AI Kitchen is here to help you cook smarter and faster!"
     st.write("")
