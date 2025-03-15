@@ -12,6 +12,14 @@ import os
 BASE_API_URL = "https://3131-2001-e68-5456-4913-3954-57ac-f3bb-c3.ngrok-free.app"
 FLOW_ID = "ce816029-b06a-4b56-9ca4-77ef44bdc839"
 
+st.markdown("""
+<style>
+[data-testid-=siSidebar]{
+    background-color: #C8A2C8;
+}
+</style>
+""", unsafe_allow_html=True)
+
 TWEAKS = {
     "OpenAIModel-2w2an": {},
     "Prompt-ScINz": {},
@@ -80,14 +88,6 @@ def process_image(image):
 
     detected_classes = list(set(detected_classes))  # remove duplicates
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
-
-st.markdown("""
-<style>
-[data-testid-=siSidebar]{
-    background-color: #C8A2C8;
-}
-</style>
-""", unsafe_allow_html=True)
 
 def main():
     st.title("AI Kitchen 👩🏻‍🍳")
