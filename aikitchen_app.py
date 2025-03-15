@@ -84,13 +84,11 @@ def process_image(image):
 def main():
     st.markdown("""
     <style>
-    [data-testid=stSidebar] {
-        background-color: #C8A2C8;
-    }
     [data-testid=stSidebar]{
         background-color: #FFB6C1;
         padding: 20px;
-        border-radius: 10px;
+        border-radius: 10px
+        color: #222222;
     }
     </style>
     """, unsafe_allow_html=True)
