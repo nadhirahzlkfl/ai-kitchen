@@ -92,8 +92,7 @@ def main():
         st.markdown("### Welcome to AI Kitchen! 👩🏻‍🍳")
         st.markdown(
         """
-        **AI Kitchen is an intuitive app that helps you explore recipes and cooking ideas. 
-        Upload images, interact with the AI assistant, and discover new meal possibilities based on your ingredients. 
+        **AI Kitchen is an intuitive app that helps you explore recipes and cooking ideas.
         Whether you're looking for inspiration or just need some culinary advice, 
         AI Kitchen is here to help you cook smarter and faster!**
         """
