@@ -9,7 +9,7 @@ from PIL import Image
 import os
 
 #%% constants
-BASE_API_URL = "https://2f9f-2001-e68-5456-4913-f435-54cf-71a7-8b5b.ngrok-free.app"
+BASE_API_URL = "https://fbc5-2001-e68-5456-4913-f435-54cf-71a7-8b5b.ngrok-free.app"
 FLOW_ID = "ce816029-b06a-4b56-9ca4-77ef44bdc839"
 
 TWEAKS = {
