@@ -1,18 +1,18 @@
 #%%
 import streamlit as st
-import requests
-import json
 import logging
+import os
 from typing import Optional
 from ultralytics import YOLO
 from PIL import Image
-import os
 from langflow.load import run_flow_from_json
 
+#%% Force Langflow to run without a database
 os.environ["LANGFLOW_DATABASE_URL"] = "sqlite:///:memory:"
+os.environ["LANGFLOW_DISABLE_DATABASE"] = "true"  # **NEW: Fully disable database usage**
 
-#%% constants
-FLOW_JSON_PATH = "AI Kitchen.json" 
+#%% Constants
+FLOW_JSON_PATH = "AI Kitchen.json"  # Ensure this file is in your project folder
 TWEAKS = {
     "OpenAIModel-2w2an": {},
     "Prompt-ScINz": {},
@@ -27,13 +27,13 @@ logging.basicConfig(level=logging.INFO)
 
 def run_flow(message: str, tweaks: Optional[dict] = None) -> dict:
     """
-    Run the Langflow JSON flow with a given message.
+    Run the Langflow JSON flow without a database.
     """
     try:
         result = run_flow_from_json(
             flow=FLOW_JSON_PATH,
             input_value=message,
-            session_id="",  # Provide a session id if you want to use session state
+            session_id="",  # No session ID, since we disabled the database
             fallback_to_env_vars=True,  # False by default
             tweaks=tweaks or {}
         )
@@ -58,7 +58,7 @@ def process_image(image):
     """
     detected_classes = []
     
-    # use best.pt model
+    # Use best.pt model
     model_path = os.path.join(os.getcwd(), 'best.pt') 
     model = YOLO(model_path)
     results = model(image)
@@ -70,7 +70,7 @@ def process_image(image):
             class_name = model.names[class_id]
             detected_classes.append(class_name)
 
-    detected_classes = list(set(detected_classes))  # remove duplicates
+    detected_classes = list(set(detected_classes))  # Remove duplicates
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
 
 def main():
