@@ -47,6 +47,10 @@ This is a Streamlit app built to assist in identifying ingredients in uploaded o
 4. The app displays the detected ingredients and recipe suggestions in a chat format.
 5. The user can chat with the assistant for further cooking tips or queries.
 
+## Prediction 
+![Prediction](/static/output.png)
+
 ### Data Source
 
 [Data Source](https://universe.roboflow.com/wonkeun-jung-vfcwn/ingredients-agbcq)
+
