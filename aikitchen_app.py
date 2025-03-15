@@ -83,7 +83,7 @@ def process_image(image):
 
 def main():
     st.title("AI Kitchen 👩🏻‍🍳")
-    st.write("Use the camera or upload an image of ingredients to start")
+    st.write("AI Kitchen is an intuitive app that helps you explore recipes and cooking ideas. Whether you're looking for inspiration or just need some culinary advice, AI Kitchen is here to help you cook smarter and faster! It’s like having a virtual chef at your fingertips!")
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -91,7 +91,7 @@ def main():
     with st.sidebar:
         st.markdown("### Welcome to AI Kitchen! 👩🏻‍🍳")
         st.markdown("""
-        It’s like having a virtual chef at your fingertips!
+        **Use the camera or upload an image of ingredients to start**
         """
         )
         
