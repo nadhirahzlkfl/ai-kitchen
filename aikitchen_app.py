@@ -84,7 +84,7 @@ def process_image(image):
 def main():
     st.title("AI Kitchen 👩🏻‍🍳")
     st.write("AI Kitchen is an intuitive app that helps you explore recipes and cooking ideas. Whether you're looking for inspiration or need some culinary advice, AI Kitchen is here to help you cook smarter and faster!")
-    st.write("It’s like having a virtual chef at your fingertips!")
+    st.write("It’s like having a virtual chef at your fingertips! 🍲")
     
     if "messages" not in st.session_state:
         st.session_state.messages = []
