@@ -8,6 +8,7 @@ from ultralytics import YOLO
 from PIL import Image
 import os
 
+st.cache_resource.clear()
 #%% constants
 BASE_API_URL = "https://3131-2001-e68-5456-4913-3954-57ac-f3bb-c3.ngrok-free.app"
 FLOW_ID = "ce816029-b06a-4b56-9ca4-77ef44bdc839"
