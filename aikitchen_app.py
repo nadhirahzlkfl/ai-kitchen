@@ -83,47 +83,12 @@ def process_image(image):
 
 def main():
     # theme
-    st.markdown("""
+   st.markdown("""
     <style>
-        /* Main Background Color */
-        body {
-            background-color: #C8A2C8;
-        }
-
-        /* Secondary background for containers */
-        .stApp {
-            background-color: #FFE8E8;
-        }
-
-        /* Sidebar Background */
-        .stSidebar {
-            background-color: #FFE8E8 !important;
-        }
-
-        /* Styling chat message box */
-        .stChatMessage {
-            background-color: #FFFFE3 !important;
-            color: #222222 !important;
-            border-radius: 10px;
-            padding: 12px;
-            margin: 6px;
-        }
-
-        /* Styling chat input box */
-        .stChatInput input {
-            background-color: #FFFFE3 !important;
-            color: #222222 !important;
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        /* Sidebar customization */
-        .stSidebar .stButton, .stSidebar .stCheckbox {
-            background-color: #FFFFE3 !important;
-            color: #222222 !important;
-        }
+        footer {visibility: hidden;}  /* Hide footer */
+        header {visibility: hidden;}  /* Hide header */
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
     
     st.title("AI Kitchen 👩🏻‍🍳")
     st.write("Use the camera or upload an image to start")
