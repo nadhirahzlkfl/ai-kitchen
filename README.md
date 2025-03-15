@@ -50,6 +50,9 @@ This is a Streamlit app built to assist in identifying ingredients in uploaded o
 ## Prediction 
 ![Prediction](/static/output.png)
 
+## Performance
+![Performance](/static/results.png)
+
 ### Data Source
 
 [Data Source](https://universe.roboflow.com/wonkeun-jung-vfcwn/ingredients-agbcq)
