@@ -87,8 +87,7 @@ def main():
     [data-testid=stSidebar] {
         background-color: #C8A2C8;
     }
-     /* Change background color of the container */
-    .stContainer {
+    [data-testid=stSidebar]{
         background-color: #FFB6C1;
         padding: 20px;
         border-radius: 10px;
