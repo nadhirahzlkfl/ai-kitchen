@@ -6,10 +6,10 @@ from typing import Optional
 from ultralytics import YOLO
 from PIL import Image
 import os
-from langflow.load import run_flow_from_json  # Import Langflow JSON execution
+from langflow.load import run_flow_from_json
 
 #%% constants
-FLOW_JSON_FILE = "AI Kitchen.json"  # Ensure this JSON file is in your project folder
+FLOW_JSON_FILE = "AI Kitchen.json"
 
 TWEAKS = {
     "OpenAIModel-2w2an": {},
