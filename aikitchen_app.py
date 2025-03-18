@@ -77,6 +77,19 @@ def process_image(image):
     detected_classes = list(set(detected_classes))  # Remove duplicates
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
 
+def generate_recipe_prompt(query: str, detected_ingredients: str) -> str:
+    """
+    Generates a structured prompt that includes both the user's query and the detected ingredients.
+    """
+    prompt = f"""
+    User uploaded an image, and the following ingredients were detected: {detected_ingredients}.
+    
+    User is asking for a recipe suggestion. Please suggest a recipe that uses these ingredients and explain the recipe steps clearly.
+    
+    User query: {query}
+    """
+    return prompt
+
 def main():
     st.markdown("""
     <style>
@@ -125,8 +138,11 @@ def main():
         # Store detected ingredients in session state
         st.session_state.detected_ingredients = detected_ingredients
         
-        # Send detected ingredients to Langflow for recipe suggestion
-        response = run_flow(detected_ingredients, tweaks=TWEAKS)
+        # Generate prompt with detected ingredients
+        prompt = generate_recipe_prompt("Give me a recipe using these ingredients", detected_ingredients)
+        
+        # Send the structured prompt to Langflow for recipe suggestion
+        response = run_flow(prompt, tweaks=TWEAKS)
         assistant_response = extract_message(response)
         
         # Add the AI response to chat history
@@ -136,7 +152,7 @@ def main():
             "avatar": "👩🏻‍🍳",
         })
 
-    # Display chat history
+    # Display chat history and handle further user queries...
     for message in st.session_state.messages:
         with st.chat_message(message["role"], avatar=message["avatar"]):
             st.write(message["content"])
