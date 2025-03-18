@@ -1,4 +1,3 @@
-#%%
 import streamlit as st
 import requests
 import json
@@ -18,7 +17,7 @@ TWEAKS = {
     "TextInput-UfZrq": {},
     "ChatInput-jIiOJ": {},
     "ChatOutput-IwGvB": {},
-    "Memory-7zsPb": {}
+    "Memory-7zsPb": {}  # Ensure memory tweak is being used if available in Langflow
 }
 
 # initialize logging
@@ -30,14 +29,22 @@ def run_flow(message: str,
              output_type: str = "chat",
              input_type: str = "chat",
              tweaks: Optional[dict] = None,
-             api_key: Optional[str] = None) -> dict:
+             api_key: Optional[str] = None,
+             conversation_history: Optional[list] = None) -> dict:
    
     api_url = f"{BASE_API_URL}/api/v1/run/{endpoint}"
+    
+    # Combine the conversation history and the current message
+    conversation = conversation_history if conversation_history else []
+    conversation.append({"role": "user", "content": message})
+    
     payload = {
         "input_value": message,
         "output_type": output_type,
         "input_type": input_type,
+        "conversation_history": conversation
     }
+    
     if tweaks:
         payload["tweaks"] = tweaks
 
@@ -50,7 +57,7 @@ def run_flow(message: str,
         return response.json()
     except json.JSONDecodeError:
         logging.error("Failed to decode JSON from the server response.")
-        return {} # return response
+        return {}  # return response
 
 # extract response
 def extract_message(response: dict) -> str:
@@ -120,7 +127,7 @@ def main():
         detected_ingredients = process_image(image)
         
         # send detected ingredients to Langflow for recipe suggestion
-        response = run_flow(detected_ingredients, tweaks=TWEAKS)
+        response = run_flow(detected_ingredients, conversation_history=st.session_state.messages, tweaks=TWEAKS)
         assistant_response = extract_message(response)
         
         # AI immediately responds when image is uploaded
@@ -151,7 +158,7 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                assistant_response = extract_message(run_flow(query, tweaks=TWEAKS))
+                assistant_response = extract_message(run_flow(query, conversation_history=st.session_state.messages, tweaks=TWEAKS))
                 message_placeholder.write(assistant_response)
         
         st.session_state.messages.append({
