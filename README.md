@@ -39,7 +39,7 @@ This is a Streamlit app built to assist in identifying ingredients in uploaded o
 
 - **run_flow**: Sends a message to Langflow's API and returns the response.
 - **extract_message**: Extracts the response message from Langflow's JSON response.
-- **process_image**: Uses YOLO to detect ingredients in the uploaded image.
+- **process_image**: Uses best.pt model to detect ingredients in the uploaded image.
 
 ### Main Logic
 
