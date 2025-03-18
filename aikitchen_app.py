@@ -151,7 +151,7 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                assistant_response = extract_message(run_flow(query, tweaks=TWEAKS))
+                assistant_response = extract_message(run_flow(query, detected_ingredients, tweaks=TWEAKS))
                 message_placeholder.write(assistant_response)
         
         st.session_state.messages.append({
