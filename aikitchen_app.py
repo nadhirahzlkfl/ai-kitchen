@@ -1,4 +1,3 @@
-#%%
 import streamlit as st
 import requests
 import json
@@ -8,7 +7,7 @@ from ultralytics import YOLO
 from PIL import Image
 import os
 
-#%% constants
+# Constants
 BASE_API_URL = "https://0053-2001-e68-5456-4913-f435-54cf-71a7-8b5b.ngrok-free.app"
 FLOW_ID = "ce816029-b06a-4b56-9ca4-77ef44bdc839"
 
@@ -18,13 +17,13 @@ TWEAKS = {
     "TextInput-UfZrq": {},
     "ChatInput-jIiOJ": {},
     "ChatOutput-IwGvB": {},
-    "Memory-7zsPb": {}
+    "Memory-7zsPb": {}  # Ensure memory is used in the API call
 }
 
-# initialize logging
+# Initialize logging
 logging.basicConfig(level=logging.INFO)
 
-# send message to Langflow's API
+# Send message to Langflow's API
 def run_flow(message: str,
              endpoint: str = FLOW_ID,
              output_type: str = "chat",
@@ -50,9 +49,9 @@ def run_flow(message: str,
         return response.json()
     except json.JSONDecodeError:
         logging.error("Failed to decode JSON from the server response.")
-        return {} # return response
+        return {}
 
-# extract response
+# Extract response from Langflow API
 def extract_message(response: dict) -> str:
     try:
         return response['outputs'][0]['outputs'][0]['results']['message']['text']
@@ -60,10 +59,11 @@ def extract_message(response: dict) -> str:
         logging.error("No valid message found in response.")
         return "No valid message found in response."
 
+# Process image and detect ingredients using YOLO model
 def process_image(image):
     detected_classes = []
     
-    # use best.pt model to detect ingredients
+    # Use best.pt model to detect ingredients
     model_path = os.path.join(os.getcwd(), 'best.pt') 
     model = YOLO(model_path)
     results = model(image)
@@ -75,7 +75,7 @@ def process_image(image):
             class_name = model.names[class_id]
             detected_classes.append(class_name)
 
-    detected_classes = list(set(detected_classes))  # remove duplicates
+    detected_classes = list(set(detected_classes))  # Remove duplicates
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
 
 def main():
@@ -95,6 +95,10 @@ def main():
     
     if "messages" not in st.session_state:
         st.session_state.messages = []
+
+    # Check if ingredients have already been detected and stored in session
+    if "detected_ingredients" not in st.session_state:
+        st.session_state.detected_ingredients = None
 
     with st.sidebar:
         st.markdown("### Welcome to AI Kitchen! 🍳")
@@ -116,31 +120,35 @@ def main():
     if image:
         st.image(image, caption="Uploaded Image", use_container_width=True)
         
-        # detect ingredients
+        # Detect ingredients
         detected_ingredients = process_image(image)
-
+        
+        # Store detected ingredients in session state (for future reference)
         st.session_state.detected_ingredients = detected_ingredients
         
-        # send detected ingredients to Langflow for recipe suggestion
-        response = run_flow(detected_ingredients, tweaks=TWEAKS)
+        # Update Langflow memory with the detected ingredients
+        TWEAKS["Memory-7zsPb"] = {"ingredients": detected_ingredients}
+        
+        # Send detected ingredients to Langflow for recipe suggestion
+        response = run_flow(f"Give me a recipe using the ingredients: {detected_ingredients}", tweaks=TWEAKS)
         assistant_response = extract_message(response)
         
         # AI immediately responds when image is uploaded
         ai_message = f"{assistant_response}"
 
-        # add the AI response to chat history
+        # Add the AI response to chat history
         st.session_state.messages.append({
             "role": "assistant",
             "content": ai_message,
             "avatar": "👩🏻‍🍳",
         })
 
-    # display chat history
+    # Display chat history and handle further user queries
     for message in st.session_state.messages:
         with st.chat_message(message["role"], avatar=message["avatar"]):
             st.write(message["content"])
 
-    # chat input for user queries
+    # Chat input for user queries
     if query := st.chat_input("Ask me anything..."):
         st.session_state.messages.append({
             "role": "user",
@@ -153,15 +161,17 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                if st.session_state.detected_ingredients is not None:
+                # When ingredients are detected and stored in memory, use them in the query
+                if st.session_state.detected_ingredients:
                     ingredients = st.session_state.detected_ingredients
-                    query_with_ingredients = f"{query} including ingredients like {ingredients}. Please suggest a recipe that uses these ingredients."
+                    query_with_ingredients = f"{query} (including ingredients like {ingredients}). Please suggest a recipe that uses these ingredients."
                     assistant_response = extract_message(run_flow(query_with_ingredients, tweaks=TWEAKS))
                 else:
                     assistant_response = extract_message(run_flow(query, tweaks=TWEAKS))
-               
+                
                 message_placeholder.write(assistant_response)
         
+        # Add the assistant's response to chat history
         st.session_state.messages.append({
             "role": "assistant",
             "content": assistant_response,
@@ -170,3 +180,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+s
