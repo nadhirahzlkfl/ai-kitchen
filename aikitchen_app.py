@@ -108,7 +108,7 @@ def main():
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Check if ingredients have already been detected
+    # Check if ingredients have already been detected and stored
     if "detected_ingredients" not in st.session_state:
         st.session_state.detected_ingredients = None
 
@@ -135,7 +135,7 @@ def main():
         # Detect ingredients
         detected_ingredients = process_image(image)
         
-        # Store detected ingredients in session state
+        # Store detected ingredients in session state (important to preserve across interactions)
         st.session_state.detected_ingredients = detected_ingredients
         
         # Generate prompt with detected ingredients
