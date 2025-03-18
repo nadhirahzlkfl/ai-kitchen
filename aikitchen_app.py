@@ -137,7 +137,7 @@ def main():
         assistant_response = extract_message(response)
         
         # AI immediately responds when image is uploaded
-        ai_message = f"{assistant_response}"
+        ai_message = f"Detected Ingredients: {st.session_state.detected_ingredients}. {assistant_response}"
 
         # add the AI response to chat history
         st.session_state.messages.append({
@@ -164,15 +164,19 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                # Use detected ingredients in the conversation context
-                conversation_history = st.session_state.messages.copy()
-                conversation_history.append({
-                    "role": "system", 
-                    "content": f"Detected ingredients: {st.session_state.detected_ingredients}"
-                })
+                # Check if the query mentions any of the detected ingredients
+                if any(ingredient.lower() in query.lower() for ingredient in st.session_state.detected_ingredients.split(", ")):
+                    # Include detected ingredients as context
+                    conversation_history = st.session_state.messages.copy()
+                    conversation_history.append({
+                        "role": "system", 
+                        "content": f"Detected ingredients: {st.session_state.detected_ingredients}. The user wants recipes based on those ingredients."
+                    })
+                    assistant_response = extract_message(run_flow(query, conversation_history=conversation_history, tweaks=TWEAKS))
+                else:
+                    # No detected ingredient mentioned, just process the query normally
+                    assistant_response = extract_message(run_flow(query, conversation_history=st.session_state.messages, tweaks=TWEAKS))
                 
-                # Send query along with ingredients context
-                assistant_response = extract_message(run_flow(query, conversation_history=conversation_history, tweaks=TWEAKS))
                 message_placeholder.write(assistant_response)
         
         st.session_state.messages.append({
