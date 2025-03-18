@@ -164,7 +164,7 @@ def main():
                 # When ingredients are detected and stored in memory, use them in the query
                 if st.session_state.detected_ingredients:
                     ingredients = st.session_state.detected_ingredients
-                    query_with_ingredients = f"Suggest a new recipe that uses the ingredients: {ingredients}. {query}"
+                    query_with_ingredients = f"{ingredients}. {query}"
                     assistant_response = extract_message(run_flow(query_with_ingredients, tweaks=TWEAKS))
                 else:
                     assistant_response = extract_message(run_flow(query, tweaks=TWEAKS))
