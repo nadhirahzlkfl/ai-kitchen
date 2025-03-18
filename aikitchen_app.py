@@ -24,15 +24,14 @@ TWEAKS = {
 # initialize logging
 logging.basicConfig(level=logging.INFO)
 
+# send message to Langflow's API
 def run_flow(message: str,
              endpoint: str = FLOW_ID,
              output_type: str = "chat",
              input_type: str = "chat",
              tweaks: Optional[dict] = None,
              api_key: Optional[str] = None) -> dict:
-    """
-    Run a flow with a given message and optional tweaks.
-    """
+   
     api_url = f"{BASE_API_URL}/api/v1/run/{endpoint}"
     payload = {
         "input_value": message,
@@ -51,8 +50,9 @@ def run_flow(message: str,
         return response.json()
     except json.JSONDecodeError:
         logging.error("Failed to decode JSON from the server response.")
-        return {}
+        return {} # return response
 
+# extract response
 def extract_message(response: dict) -> str:
     try:
         return response['outputs'][0]['outputs'][0]['results']['message']['text']
@@ -61,12 +61,9 @@ def extract_message(response: dict) -> str:
         return "No valid message found in response."
 
 def process_image(image):
-    """
-    Processes the uploaded image using YOLO model and returns detected ingredients.
-    """
     detected_classes = []
     
-    # use best.pt model
+    # use best.pt model to detect ingredients
     model_path = os.path.join(os.getcwd(), 'best.pt') 
     model = YOLO(model_path)
     results = model(image)
