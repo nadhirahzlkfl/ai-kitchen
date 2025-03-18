@@ -118,6 +118,8 @@ def main():
         
         # detect ingredients
         detected_ingredients = process_image(image)
+
+        st.session_state.detected_ingredients = detected_ingredients
         
         # send detected ingredients to Langflow for recipe suggestion
         response = run_flow(detected_ingredients, tweaks=TWEAKS)
@@ -151,8 +153,13 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                response = run_flow(detected_ingredients, tweaks=TWEAKS)
-                assistant_response = extract_message(run_flow(query, tweaks=TWEAKS))
+                if st.session_state.detected_ingredients is not None:
+                    ingredients = st.session_state.detected_ingredients
+                    query_with_ingredients = f"{query} including ingredients like {ingredients}. Please suggest a recipe that uses these ingredients."
+                    assistant_response = extract_message(run_flow(query_with_ingredients, tweaks=TWEAKS))
+                else:
+                    assistant_response = extract_message(run_flow(query, tweaks=TWEAKS))
+               
                 message_placeholder.write(assistant_response)
         
         st.session_state.messages.append({
