@@ -102,6 +102,9 @@ def main():
     
     if "messages" not in st.session_state:
         st.session_state.messages = []
+    
+    if "detected_ingredients" not in st.session_state:
+        st.session_state.detected_ingredients = ""
 
     with st.sidebar:
         st.markdown("### Welcome to AI Kitchen! 🍳")
@@ -126,7 +129,10 @@ def main():
         # detect ingredients
         detected_ingredients = process_image(image)
         
-        # send detected ingredients to Langflow for recipe suggestion
+        # Save detected ingredients in session state
+        st.session_state.detected_ingredients = detected_ingredients
+        
+        # Send detected ingredients to Langflow for recipe suggestion
         response = run_flow(detected_ingredients, conversation_history=st.session_state.messages, tweaks=TWEAKS)
         assistant_response = extract_message(response)
         
@@ -158,7 +164,15 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                assistant_response = extract_message(run_flow(query, conversation_history=st.session_state.messages, tweaks=TWEAKS))
+                # Use detected ingredients in the conversation context
+                conversation_history = st.session_state.messages.copy()
+                conversation_history.append({
+                    "role": "system", 
+                    "content": f"Detected ingredients: {st.session_state.detected_ingredients}"
+                })
+                
+                # Send query along with ingredients context
+                assistant_response = extract_message(run_flow(query, conversation_history=conversation_history, tweaks=TWEAKS))
                 message_placeholder.write(assistant_response)
         
         st.session_state.messages.append({
