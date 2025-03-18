@@ -100,10 +100,9 @@ def main():
     st.write("AI Kitchen is an intuitive app that helps you explore recipes and cooking ideas. Whether you're looking for inspiration or need some culinary advice, AI Kitchen is here to help you cook smarter and faster!")
     st.write("It’s like having a virtual chef at your fingertips! 🍲")
     
-    if "messages" not in st.session_state:
+    # Clear session state on reload
+    if "messages" not in st.session_state or "detected_ingredients" not in st.session_state:
         st.session_state.messages = []
-    
-    if "detected_ingredients" not in st.session_state:
         st.session_state.detected_ingredients = ""
 
     with st.sidebar:
