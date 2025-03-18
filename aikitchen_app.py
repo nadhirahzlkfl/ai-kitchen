@@ -95,7 +95,7 @@ def main():
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # check if ingredients have already been detected
+    # Check if ingredients have already been detected
     if "detected_ingredients" not in st.session_state:
         st.session_state.detected_ingredients = None
 
@@ -119,29 +119,29 @@ def main():
     if image:
         st.image(image, caption="Uploaded Image", use_container_width=True)
         
-        # detect ingredients
+        # Detect ingredients
         detected_ingredients = process_image(image)
         
-        # store detected ingredients
+        # Store detected ingredients in session state
         st.session_state.detected_ingredients = detected_ingredients
         
-        # send detected ingredients to Langflow for recipe suggestion
+        # Send detected ingredients to Langflow for recipe suggestion
         response = run_flow(detected_ingredients, tweaks=TWEAKS)
         assistant_response = extract_message(response)
         
-        # add the AI response to chat history
+        # Add the AI response to chat history
         st.session_state.messages.append({
             "role": "assistant",
             "content": f"Here’s a recipe using the ingredients: {assistant_response}",
             "avatar": "👩🏻‍🍳",
         })
 
-    # display chat history
+    # Display chat history
     for message in st.session_state.messages:
         with st.chat_message(message["role"], avatar=message["avatar"]):
             st.write(message["content"])
 
-    # chat input for user queries
+    # Chat input for user queries
     if query := st.chat_input("Ask me anything..."):
         st.session_state.messages.append({
             "role": "user",
@@ -154,17 +154,17 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                # if ingredients are detected, send the ingredients with the query
+                # If ingredients are detected, always include them with the query
                 if st.session_state.detected_ingredients:
                     ingredients = st.session_state.detected_ingredients
-                    query_with_ingredients = f"{query} including ingredients like {ingredients}"
+                    query_with_ingredients = f"{query} including ingredients like {ingredients}. Please suggest a recipe that uses these ingredients."
                     assistant_response = extract_message(run_flow(query_with_ingredients, tweaks=TWEAKS))
                 else:
                     assistant_response = extract_message(run_flow(query, tweaks=TWEAKS))
                 
                 message_placeholder.write(assistant_response)
         
-        # add the assistant's response to chat history
+        # Add the assistant's response to chat history
         st.session_state.messages.append({
             "role": "assistant",
             "content": assistant_response,
