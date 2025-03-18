@@ -17,7 +17,7 @@ TWEAKS = {
     "TextInput-UfZrq": {},
     "ChatInput-jIiOJ": {},
     "ChatOutput-IwGvB": {},
-    "Memory-7zsPb": {}  # Ensure memory tweak is being used if available in Langflow
+    "Memory-7zsPb": {}
 }
 
 # initialize logging
@@ -34,7 +34,7 @@ def run_flow(message: str,
    
     api_url = f"{BASE_API_URL}/api/v1/run/{endpoint}"
     
-    # Combine the conversation history and the current message
+    # combine the conversation history and the current message
     conversation = conversation_history if conversation_history else []
     conversation.append({"role": "user", "content": message})
     
@@ -128,10 +128,10 @@ def main():
         # detect ingredients
         detected_ingredients = process_image(image)
         
-        # Save detected ingredients in session state
+        # save detected ingredients in session state
         st.session_state.detected_ingredients = detected_ingredients
         
-        # Send detected ingredients to Langflow for recipe suggestion
+        # send detected ingredients to Langflow for recipe suggestion
         response = run_flow(detected_ingredients, conversation_history=st.session_state.messages, tweaks=TWEAKS)
         assistant_response = extract_message(response)
         
@@ -163,9 +163,9 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                # Check if the query mentions any of the detected ingredients
+                # check if the query mentions any of the detected ingredients
                 if any(ingredient.lower() in query.lower() for ingredient in st.session_state.detected_ingredients.split(", ")):
-                    # Include detected ingredients as context
+                    # include detected ingredients as context
                     conversation_history = st.session_state.messages.copy()
                     conversation_history.append({
                         "role": "system", 
@@ -173,7 +173,7 @@ def main():
                     })
                     assistant_response = extract_message(run_flow(query, conversation_history=conversation_history, tweaks=TWEAKS))
                 else:
-                    # No detected ingredient mentioned, just process the query normally
+                    # no detected ingredient mentioned, process the query normally
                     assistant_response = extract_message(run_flow(query, conversation_history=st.session_state.messages, tweaks=TWEAKS))
                 
                 message_placeholder.write(assistant_response)
