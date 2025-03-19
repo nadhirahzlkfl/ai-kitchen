@@ -176,7 +176,8 @@ def main():
             "avatar": "👩🏻‍🍳",
         })
 
-col = st.columns(1)
+    # Save recipe button
+    col = st.columns(1)  # Ensure proper indentation for the columns layout
     with col:
         if st.button("💾 Save Recipe"):
             save_recipe()
