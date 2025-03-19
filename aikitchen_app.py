@@ -78,13 +78,6 @@ def process_image(image):
     detected_classes = list(set(detected_classes))  # remove duplicates
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
 
-def save_recipe():
-    with open("recipe.txt", "w", encoding="utf-8") as file:
-        for message in st.session_state.messages:
-            role = "user" if message["role"] == "user" else "assistant"
-            file.write(f"{role}: {message['content']}\n")
-    st.success("Recipe saved 📁")
-
 def main():
     st.markdown("""
     <style>
@@ -175,12 +168,6 @@ def main():
             "content": assistant_response,
             "avatar": "👩🏻‍🍳",
         })
-
-    # Save recipe button
-    col = st.columns(1)  # Ensure proper indentation for the columns layout
-    with col:
-        if st.button("💾 Save Recipe"):
-            save_recipe()
 
 if __name__ == "__main__":
     main()
