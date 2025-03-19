@@ -1,4 +1,3 @@
-#%%
 import streamlit as st
 import requests
 import json
@@ -50,7 +49,7 @@ def run_flow(message: str,
         return response.json()
     except json.JSONDecodeError:
         logging.error("Failed to decode JSON from the server response.")
-        return {} # return response
+        return {}  # return response
 
 # extract response
 def extract_message(response: dict) -> str:
@@ -77,6 +76,23 @@ def process_image(image):
 
     detected_classes = list(set(detected_classes))  # remove duplicates
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
+
+# function to create a text file for download
+def create_recipe_file(recipe: str) -> str:
+    file_name = "recipe.txt"
+    with open(file_name, "w") as file:
+        file.write(recipe)
+    return file_name
+
+# function to create a downloadable link in Streamlit
+def get_download_button(file_path: str, label: str) -> None:
+    with open(file_path, "rb") as file:
+        st.download_button(
+            label=label,
+            data=file,
+            file_name=os.path.basename(file_path),
+            mime="text/plain"
+        )
 
 def main():
     st.markdown("""
@@ -136,6 +152,10 @@ def main():
                 "content": ai_message,
                 "avatar": "👩🏻‍🍳",
             })
+            
+            # create the recipe file and provide download button
+            recipe_file = create_recipe_file(ai_message)
+            get_download_button(recipe_file, "Download Recipe")
 
     # display chat history
     for message in st.session_state.messages:
