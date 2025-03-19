@@ -9,7 +9,7 @@ model=YOLO('yolo11n.pt')
 # data loading
 data_path=os.path.join(os.getcwd(),'dataset','data.yaml')
 # model training
-result=model.train(data=data_path,epochs=30,imgsz=640)
+result=model.train(data=data_path,epochs=50,imgsz=640)
 
 # model prediction
 filepath=os.path.join(os.getcwd(),'static','sample image.jpg')
