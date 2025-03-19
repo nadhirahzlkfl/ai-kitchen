@@ -110,32 +110,32 @@ def main():
         picture = st.camera_input("Take a picture", disabled=not enable_camera)
         uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
     
-    image = None
-    if picture:
-        image = Image.open(picture)
-    elif uploaded_file:
-        image = Image.open(uploaded_file)
+        image = None
+        if picture:
+            image = Image.open(picture)
+        elif uploaded_file:
+            image = Image.open(uploaded_file)
+        
+        if image:
+            st.image(image, caption="Uploaded Image", use_container_width=True)
+            
+            # detect ingredients
+            detected_ingredients = process_image(image)
+            st.session_state.detected_ingredients = detected_ingredients
+            
+            # send detected ingredients to Langflow for recipe suggestion
+            response = run_flow(detected_ingredients, tweaks=TWEAKS)
+            assistant_response = extract_message(response)
+            
+            # AI immediately responds when image is uploaded
+            ai_message = f"Based on the ingredients you provided: {detected_ingredients}, here's a recipe suggestion: {assistant_response}"
     
-    if image:
-        st.image(image, caption="Uploaded Image", use_container_width=True)
-        
-        # detect ingredients
-        detected_ingredients = process_image(image)
-        st.session_state.detected_ingredients = detected_ingredients
-        
-        # send detected ingredients to Langflow for recipe suggestion
-        response = run_flow(detected_ingredients, tweaks=TWEAKS)
-        assistant_response = extract_message(response)
-        
-        # AI immediately responds when image is uploaded
-        ai_message = f"Based on the ingredients you provided: {detected_ingredients}, here's a recipe suggestion: {assistant_response}"
-
-        # add the AI response to chat history
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": ai_message,
-            "avatar": "👩🏻‍🍳",
-        })
+            # add the AI response to chat history
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": ai_message,
+                "avatar": "👩🏻‍🍳",
+            })
 
     # display chat history
     for message in st.session_state.messages:
