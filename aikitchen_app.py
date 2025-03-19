@@ -59,6 +59,7 @@ def extract_message(response: dict) -> str:
         logging.error("No valid message found in response.")
         return "No valid message found in response."
 
+@st.cache_resource
 def process_image(image):
     detected_classes = []
     
