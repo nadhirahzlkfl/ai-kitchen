@@ -79,20 +79,12 @@ def process_image(image):
 
 # function to create a text file for download
 def create_recipe_file(recipe: str) -> str:
-    file_name = "recipe.txt"
-    with open(file_name, "w") as file:
-        file.write(recipe)
-    return file_name
-
-# function to create a downloadable link in Streamlit
-def get_download_button(file_path: str, label: str) -> None:
-    with open(file_path, "rb") as file:
-        st.download_button(
-            label=label,
-            data=file,
-            file_name=os.path.basename(file_path),
-            mime="text/plain"
-        )
+    # We use an in-memory buffer instead of saving it to disk directly
+    from io import StringIO
+    buffer = StringIO()
+    buffer.write(recipe)
+    buffer.seek(0)  # Rewind the buffer to the beginning so it can be read from the start
+    return buffer
 
 def main():
     st.markdown("""
@@ -152,10 +144,15 @@ def main():
                 "content": ai_message,
                 "avatar": "👩🏻‍🍳",
             })
-            
-            # create the recipe file and provide download button
+
+            # Create the recipe file and provide download button
             recipe_file = create_recipe_file(ai_message)
-            get_download_button(recipe_file, "Download Recipe")
+            st.download_button(
+                label="Download your Recipe",
+                data=recipe_file,
+                file_name="recipe.txt",
+                mime="text/plain"
+            )
 
     # display chat history
     for message in st.session_state.messages:
@@ -184,10 +181,4 @@ def main():
                 message_placeholder.write(assistant_response)
         
         st.session_state.messages.append({
-            "role": "assistant",
-            "content": assistant_response,
-            "avatar": "👩🏻‍🍳",
-        })
-
-if __name__ == "__main__":
-    main()
+           
