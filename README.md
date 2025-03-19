@@ -16,7 +16,7 @@ This is a Streamlit app built to assist in identifying ingredients in uploaded o
 ### 1. Image Upload & Camera Capture
 
 - Use the **camera input** or **file upload** option to add an image of ingredients.
-- The app processes the image using a YOLO model and detects visible ingredients.
+- The app processes the image using a YOLO model (best.pt) and detects visible ingredients.
 
 ### 2. Recipe Suggestions & Assistant Chat
 
