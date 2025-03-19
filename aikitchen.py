@@ -5,7 +5,7 @@ import cv2
 import matplotlib.pyplot as plt
 import os
 
-model=YOLO('yolov11n.pt')
+model=YOLO('yolo11n.pt')
 # data loading
 data_path=os.path.join(os.getcwd(),'dataset','data.yaml')
 # model training
