@@ -169,7 +169,7 @@ def main():
                     conversation_history = st.session_state.messages.copy()
                     conversation_history.append({
                         "role": "system", 
-                        "content": f"Detected ingredients: {st.session_state.detected_ingredients}. The user wants recipes based on those ingredients."
+                        "content": f"Detected ingredients: {st.session_state.detected_ingredients}. The user wants different recipes based on those ingredients."
                     })
                     assistant_response = extract_message(run_flow(query, conversation_history=conversation_history, tweaks=TWEAKS))
                 else:
