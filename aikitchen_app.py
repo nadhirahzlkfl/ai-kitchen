@@ -1,3 +1,4 @@
+#%%
 import streamlit as st
 import requests
 import json
@@ -29,22 +30,14 @@ def run_flow(message: str,
              output_type: str = "chat",
              input_type: str = "chat",
              tweaks: Optional[dict] = None,
-             api_key: Optional[str] = None,
-             conversation_history: Optional[list] = None) -> dict:
+             api_key: Optional[str] = None) -> dict:
    
     api_url = f"{BASE_API_URL}/api/v1/run/{endpoint}"
-    
-    # combine the conversation history and the current message
-    conversation = conversation_history if conversation_history else []
-    conversation.append({"role": "user", "content": message})
-    
     payload = {
         "input_value": message,
         "output_type": output_type,
         "input_type": input_type,
-        "conversation_history": conversation
     }
-    
     if tweaks:
         payload["tweaks"] = tweaks
 
@@ -57,7 +50,7 @@ def run_flow(message: str,
         return response.json()
     except json.JSONDecodeError:
         logging.error("Failed to decode JSON from the server response.")
-        return {}  # return response
+        return {} # return response
 
 # extract response
 def extract_message(response: dict) -> str:
@@ -100,10 +93,11 @@ def main():
     st.write("AI Kitchen is an intuitive app that helps you explore recipes and cooking ideas. Whether you're looking for inspiration or need some culinary advice, AI Kitchen is here to help you cook smarter and faster!")
     st.write("It’s like having a virtual chef at your fingertips! 🍲")
     
-
-    if "messages" not in st.session_state or "detected_ingredients" not in st.session_state:
+    if "messages" not in st.session_state:
         st.session_state.messages = []
-        st.session_state.detected_ingredients = ""
+    
+    if "detected_ingredients" not in st.session_state:
+        st.session_state.detected_ingredients = []
 
     with st.sidebar:
         st.markdown("### Welcome to AI Kitchen! 🍳")
@@ -127,16 +121,14 @@ def main():
         
         # detect ingredients
         detected_ingredients = process_image(image)
-        
-        # save detected ingredients in session state
         st.session_state.detected_ingredients = detected_ingredients
         
         # send detected ingredients to Langflow for recipe suggestion
-        response = run_flow(detected_ingredients, conversation_history=st.session_state.messages, tweaks=TWEAKS)
+        response = run_flow(detected_ingredients, tweaks=TWEAKS)
         assistant_response = extract_message(response)
         
         # AI immediately responds when image is uploaded
-        ai_message = f"Detected Ingredients: {st.session_state.detected_ingredients}. {assistant_response}"
+        ai_message = f"Based on the ingredients you provided: {detected_ingredients}, here's a recipe suggestion: {assistant_response}"
 
         # add the AI response to chat history
         st.session_state.messages.append({
@@ -163,19 +155,12 @@ def main():
         with st.chat_message("assistant", avatar="👩🏻‍🍳"):
             message_placeholder = st.empty()
             with st.spinner("Let me think..."):
-                # check if the query mentions any of the detected ingredients
-                if any(ingredient.lower() in query.lower() for ingredient in st.session_state.detected_ingredients.split(", ")):
-                    # include detected ingredients as context
-                    conversation_history = st.session_state.messages.copy()
-                    conversation_history.append({
-                        "role": "system", 
-                        "content": f"Detected ingredients: {st.session_state.detected_ingredients}. The user wants different recipes based on those ingredients."
-                    })
-                    assistant_response = extract_message(run_flow(query, conversation_history=conversation_history, tweaks=TWEAKS))
+                # use previously detected ingredients if available
+                if st.session_state.detected_ingredients:
+                    query_with_ingredients = f"{query}. The detected ingredients are: {st.session_state.detected_ingredients}"
+                    assistant_response = extract_message(run_flow(query_with_ingredients, tweaks=TWEAKS))
                 else:
-                    # no detected ingredient mentioned, process the query normally
-                    assistant_response = extract_message(run_flow(query, conversation_history=st.session_state.messages, tweaks=TWEAKS))
-                
+                    assistant_response = extract_message(run_flow(query, tweaks=TWEAKS))
                 message_placeholder.write(assistant_response)
         
         st.session_state.messages.append({
