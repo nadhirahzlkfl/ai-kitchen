@@ -128,7 +128,7 @@ def main():
             assistant_response = extract_message(response)
             
             # AI immediately responds when image is uploaded
-            ai_message = f"{detected_ingredients},{assistant_response}"
+            ai_message = {detected_ingredients}.{assistant_response}
     
             # add the AI response to chat history
             st.session_state.messages.append({
