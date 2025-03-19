@@ -50,10 +50,10 @@ This is a Streamlit app built to assist in identifying ingredients in uploaded o
 5. The user can chat with the assistant for further queries.
 
 ## Prediction 
-![Prediction](/static/output.png)
+![Prediction](/static/prediction.png)
 
 ## Performance
-![Performance](/static/results.png)
+![Performance](/static/performance.png)
 
 ### Data Source
 
