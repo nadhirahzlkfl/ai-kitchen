@@ -9,7 +9,7 @@ This is a Streamlit app built to assist in identifying ingredients in uploaded o
 - Upload images or use camera to capture photos.
 - Automatically detects ingredients using a pre-trained YOLO model (`best.pt`).
 - Sends the detected ingredients to Langflow for recipe suggestions.
-- Chat interface for querying the AI assistant for cooking tips and recipes.
+- Chat interface for querying the AI assistant.
 
 ## How It Works
 
