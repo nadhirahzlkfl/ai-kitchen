@@ -79,16 +79,6 @@ def process_image(image):
     return ", ".join(detected_classes) if detected_classes else "No ingredients detected"
 
 def main():
-    st.markdown("""
-    <style>
-    [data-testid=stSidebar]{
-        background-color: #A47DAB;
-        padding: 20px;
-        border-radius: 10px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
     st.title("AI Kitchen 👩🏻‍🍳")
     st.write("AI Kitchen is an intuitive app that helps you explore recipes and cooking ideas. Whether you're looking for inspiration or need some culinary advice, AI Kitchen is here to help you cook smarter and faster!")
     st.write("It’s like having a virtual chef at your fingertips! 🍲")
